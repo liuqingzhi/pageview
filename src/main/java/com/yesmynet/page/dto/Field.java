@@ -3,6 +3,9 @@ package com.yesmynet.page.dto;
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
+
 /**
  * 表示一个字段，即一个输入框。
  * @author liuqingzhi
@@ -127,16 +130,151 @@ public class Field implements PageViewComponent {
 		
 	}
 	private String id;
+	private String name;
 	private HtmlType htmlType;
 	private String title;
 	private String description;
 	private String value;
 	private List<Option> options;
-	
-	public String getViewHtml() {
-		String htmlTemplate = htmlType.getHtmlTemplate();
-		MessageFormat.format(htmlTemplate,datas);
-		return null;
+	public String getId() {
+		return id;
 	}
-
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public HtmlType getHtmlType() {
+		return htmlType;
+	}
+	public void setHtmlType(HtmlType htmlType) {
+		this.htmlType = htmlType;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public String getValue() {
+		return value;
+	}
+	public void setValue(String value) {
+		this.value = value;
+	}
+	public List<Option> getOptions() {
+		return options;
+	}
+	public void setOptions(List<Option> options) {
+		this.options = options;
+	}
+	public String getViewHtml() {
+		return toHtml();
+	}
+	/**
+     * 转成html代码
+     * @return
+     */
+    public String toHtml()
+    {
+        String re=null;
+        HtmlType htmlType2 = this.getHtmlType();
+        String parameterName = this.getName();
+        switch(htmlType2)
+        {
+        case InputText:
+        case TextArea:
+        case InputHidden:
+        case Button:
+        case File:
+        	String inputValue=getValue();
+        	if(HtmlType.Button.equals(htmlType2))
+        	{
+        		inputValue=getTitle();
+        	}
+            re=MessageFormat.format(htmlType2.getHtmlTemplate(), inputValue,parameterName,"","","");//style,styleClass,elementHtml);
+            break;
+        case Select:
+            re=MessageFormat.format(htmlType2.getHtmlTemplate(), getOptionsHtml(),parameterName,"","","");//style,styleClass,elementHtml);
+            break;
+        case Radio:
+        case Checkbox:
+            re=toHtmlCheckBoxRadio();
+            break;
+        }
+        
+        
+        return re;
+    }
+    private String toHtmlCheckBoxRadio()
+    {
+        StringBuilder re=new StringBuilder();
+        HtmlType htmlType2 = this.getHtmlType();
+        String htmlTemplate = htmlType2.getHtmlTemplate();
+        List<Option> value2 = this.getOptions();
+        String parameterName=this.getName();
+        
+        if(!CollectionUtils.isEmpty(value2))
+        {
+            for(Option option:value2)
+            {
+                String selected=isOptionSelected(option,this.getValue())?"checked":"";
+                re.append(MessageFormat.format(htmlTemplate, option.getValue(),parameterName,"","","",option.getTitle(),selected));//style,styleClass,elementHtml,option.getText(),selected));
+            }
+        }
+        return re.toString();
+    }
+    /**
+     * 对于只有一个值的输入框（如：单选文本框，多行文本框等），得到输入的值
+     * @return
+     */
+    public String getFieldValue()
+    {
+        return this.getValue();
+    }
+    /**
+     * 得到下拉框的所有选项的html字符串
+     * @return
+     */
+    private String getOptionsHtml()
+    {
+        StringBuilder re=new StringBuilder();
+        List<Option> value2 = this.getOptions();
+        if(!CollectionUtils.isEmpty(value2))
+        {
+            String optionTempalte="<option value='%1$s' %2$s>%3$s</option>\n";
+            for(Option option:value2)
+            {
+                String selected=isOptionSelected(option,this.getValue())?"selected":"";
+                String format = String.format(optionTempalte, option.getValue(),selected,option.getTitle());
+                re.append(format);
+            }
+        }
+        return re.toString();
+    }
+    /**
+     * 判断选项是否选中
+     * @param curOption
+     * @param allSelected
+     * @return
+     */
+    private boolean isOptionSelected(Option curOption,String allSelected )
+    {
+        boolean re=false;
+        if(StringUtils.isNotBlank(curOption.getValue()) && StringUtils.isNotBlank(allSelected) && curOption.getValue().equals(allSelected))
+            re=true;
+        
+        return re;
+    }  
+	
 }

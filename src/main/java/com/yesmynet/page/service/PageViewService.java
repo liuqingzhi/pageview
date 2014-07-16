@@ -10,9 +10,9 @@ import com.yesmynet.page.dto.Node;
 import com.yesmynet.page.dto.PageViewComponent;
 
 public class PageViewService {
-	public String showHtml(Node<? extends PageViewComponent> data)
+	public String showHtml(Node<PageViewComponent> data)
 	{
-		List<Node<? extends PageViewComponent>> datas=new ArrayList<Node<? extends PageViewComponent>>();
+		List<Node<PageViewComponent>> datas=new ArrayList<Node<PageViewComponent>>();
 		datas.add(data);
 		StringBuilder sb=new StringBuilder();
 		showHtmlInternal(datas,sb);
@@ -23,14 +23,15 @@ public class PageViewService {
 	 * @param datas
 	 * @return
 	 */
-	private void showHtmlInternal(List<Node<? extends PageViewComponent>> datas,StringBuilder sb)
+	private void showHtmlInternal(List<Node<PageViewComponent>> datas,StringBuilder sb)
 	{
-		List<Node<? extends PageViewComponent>> allChildren=new ArrayList<Node<? extends PageViewComponent>>();
+		List<Node<PageViewComponent>> allChildren=new ArrayList<Node<PageViewComponent>>();
 		if(CollectionUtils.isNotEmpty(datas))
 		{
-			for(Node<? extends PageViewComponent> node:datas)
+			for(Node<PageViewComponent> node:datas)
 			{
-				allChildren.addAll(node.getChildren());
+				List<Node<PageViewComponent>> children = node.getChildren();
+				if(CollectionUtils.isNotEmpty(children)) allChildren.addAll(children);
 				
 				PageViewComponent data = node.getData();
 				if(data!=null)
