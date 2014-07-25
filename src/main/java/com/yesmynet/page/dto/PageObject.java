@@ -10,34 +10,41 @@ import org.apache.commons.collections.CollectionUtils;
  *
  */
 public class PageObject implements PageViewComponent {
+	private String id;
 	private String title;
 	/**
 	 * 所有的字段
 	 */
-	private List<Field> fields;
+	private List<PageViewComponent> fields;
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getTitle() {
 		return title;
 	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public List<Field> getFields() {
+	public List<PageViewComponent> getFields() {
 		return fields;
 	}
-	public void setFields(List<Field> fields) {
+	public void setFields(List<PageViewComponent> fields) {
 		this.fields = fields;
 	}
+
 	public String getViewHtml() {
 		StringBuilder sb=new StringBuilder();
-		sb.append("<fieldset>");
+		sb.append("<fieldset id='").append(id).append("'>");
 		sb.append("<legend>").append(title).append("</legend>");
 		if(CollectionUtils.isNotEmpty(fields))
 		{
-			for(Field f:fields)
+			for(PageViewComponent f:fields)
 			{
-				sb.append(f.getTitle()).append(":").append(f.getViewHtml()).append("<br>");
+				sb.append(f.getViewHtml());
 			}
 		}
 		
