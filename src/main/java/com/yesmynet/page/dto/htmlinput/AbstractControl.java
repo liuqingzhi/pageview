@@ -1,7 +1,10 @@
 package com.yesmynet.page.dto.htmlinput;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.yesmynet.page.dto.Node;
 import com.yesmynet.page.dto.PageViewComponent;
 
 public abstract class AbstractControl implements PageViewComponent {
@@ -9,6 +12,9 @@ public abstract class AbstractControl implements PageViewComponent {
 	protected String name;
 	protected String title;
 	protected String description;
+	protected List<PageViewComponent> children;
+	protected String parentValue;
+	protected boolean hideByParent;
 	
 	protected abstract String getHtmlTemplate();
 	protected abstract Object[] getHtmlDatas();
@@ -26,6 +32,13 @@ public abstract class AbstractControl implements PageViewComponent {
         	re="<div id='"+ id +"'><label>"+ title +"</label>"+re+"</div>";
         }
         return re;
+	}
+	public List<Node> getNodeTree()
+	{
+		List<Node> re=new ArrayList<Node>();
+		Node a=new Node();
+		a.setId(id);
+		return re;
 	}
 	public String getId() {
 		return id;
@@ -50,6 +63,24 @@ public abstract class AbstractControl implements PageViewComponent {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	public List<PageViewComponent> getChildren() {
+		return children;
+	}
+	public void setChildren(List<PageViewComponent> children) {
+		this.children = children;
+	}
+	public String getParentValue() {
+		return parentValue;
+	}
+	public void setParentValue(String parentValue) {
+		this.parentValue = parentValue;
+	}
+	public boolean isHideByParent() {
+		return hideByParent;
+	}
+	public void setHideByParent(boolean hideByParent) {
+		this.hideByParent = hideByParent;
 	}
 	
 }

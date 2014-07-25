@@ -2,36 +2,30 @@ package com.yesmynet.page.dto;
 
 import java.util.List;
 
-public class Node<T> {
+public class Node {
 	/**
 	 * 主键
 	 */
 	private String id;
-	private T data;
-	private Node<T> parent;
-	private List<Node<T>> children;
+	private Node parent;
+	private List<Node> children;
 	public String getId() {
 		return id;
 	}
 	public void setId(String id) {
 		this.id = id;
 	}
-	public T getData() {
-		return data;
-	}
-	public void setData(T data) {
-		this.data = data;
-	}
-	public Node<T> getParent() {
+	public Node getParent() {
 		return parent;
 	}
-	public void setParent(Node<T> parent) {
+	public void setParent(Node parent) {
 		this.parent = parent;
 	}
-	public List<Node<T>> getChildren() {
+	public List<Node> getChildren() {
 		return children;
 	}
-	public void setChildren(List<Node<T>> children) {
+	public void setChildren(List<Node> children) {
 		this.children = children;
 	}
+	
 }

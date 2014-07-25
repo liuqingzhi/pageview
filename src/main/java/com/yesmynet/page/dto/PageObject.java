@@ -1,5 +1,6 @@
 package com.yesmynet.page.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -16,7 +17,7 @@ public class PageObject implements PageViewComponent {
 	 * 所有的字段
 	 */
 	private List<PageViewComponent> fields;
-	
+	private String parentValue;
 	public String getId() {
 		return id;
 	}
@@ -35,7 +36,12 @@ public class PageObject implements PageViewComponent {
 	public void setFields(List<PageViewComponent> fields) {
 		this.fields = fields;
 	}
-
+	public String getParentValue() {
+		return parentValue;
+	}
+	public void setParentValue(String parentValue) {
+		this.parentValue = parentValue;
+	}
 	public String getViewHtml() {
 		StringBuilder sb=new StringBuilder();
 		sb.append("<fieldset id='").append(id).append("'>");
@@ -51,5 +57,23 @@ public class PageObject implements PageViewComponent {
 		sb.append("</fieldset>");
 		return sb.toString();
 	}
-
+	public List<PageViewComponent> getChildren() {
+		List<PageViewComponent> re=new ArrayList<PageViewComponent>();
+		if(CollectionUtils.isNotEmpty(fields))
+		{
+			for(PageViewComponent c:fields)
+			{
+				List<PageViewComponent> children = c.getChildren();
+				if(CollectionUtils.isNotEmpty(children))
+					re.addAll(children);
+			}
+		}
+		return re;
+	}
+	public List<Node> getNodeTree() {
+		return null;
+	}
+	public boolean isHideByParent() {
+		return true;
+	}
 }

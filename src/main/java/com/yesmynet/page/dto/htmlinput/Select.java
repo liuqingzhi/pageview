@@ -35,7 +35,7 @@ public class Select extends AbstractControl{
     {
         StringBuilder re=new StringBuilder();
         List<Option> value2 = this.getOptions();
-        String optionTempalte="<option value='%1$s' %2$s>%3$s</option>\n";
+        String optionTempalte="<option value='%1$s' data-parentValue='%4$s' %2$s>%3$s</option>\n";
         re.append(String.format(optionTempalte, "","",""));
         
         if(!CollectionUtils.isEmpty(value2))
@@ -43,7 +43,8 @@ public class Select extends AbstractControl{
             for(Option option:value2)
             {
                 String selected=isOptionSelected(option,values)?"selected":"";
-                String format = String.format(optionTempalte, option.getValue(),selected,option.getTitle());
+                String parentValue=this.isHideByParent()?this.getParentValue():"";
+                String format = String.format(optionTempalte, option.getValue(),selected,option.getTitle(),parentValue);
                 re.append(format);
             }
         }

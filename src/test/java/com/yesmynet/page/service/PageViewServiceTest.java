@@ -18,15 +18,15 @@ public class PageViewServiceTest extends TestCase {
 
 	public void testShowHtml() {
 		PageViewService service=new PageViewService();
-		Node<PageViewComponent> datas = getDatas();
+		PageViewComponent datas = getDatas();
 		String showHtml = service.showHtml(datas);
+		String showTreeJson = service.showTreeJson(datas);
 		System.out.println(showHtml);
+		System.out.println(showTreeJson);
 	}
-	private Node<PageViewComponent> getDatas()
+	private PageViewComponent getDatas()
 	{
-		Node<PageViewComponent> datas=new Node<PageViewComponent>();
-		Node<PageViewComponent> datasChild=new Node<PageViewComponent>();
-		
+				
 		PageObject pageObject=new PageObject();
 		List<PageViewComponent> fields=new ArrayList<PageViewComponent>();
 		pageObject.setId("pageObject1");
@@ -77,12 +77,44 @@ public class PageViewServiceTest extends TestCase {
 		f3.setValues(Arrays.asList("o1Value","o3Value"));
 		fields.add(f3);
 		
+		return pageObject;
+	}
+	private  PageViewComponent  getDatas2()
+	{
+		PageObject pageObject=new PageObject();
+		List<PageViewComponent> fields=new ArrayList<PageViewComponent>();
+		pageObject.setId("address");
+		pageObject.setTitle("地址编辑");
+		pageObject.setFields(fields);
 		
-		datas.setData(pageObject);
-		datasChild.setData(pageObject);
-		datas.setChildren(Arrays.asList(datasChild));
 		
 		
-		return datas;
+		Select provinceInput=new Select();
+		List<Option> provinceOptions=new ArrayList<Option>();
+		provinceInput.setOptions(provinceOptions);
+		provinceInput.setDescription("这是描述");
+		provinceInput.setId("provinceId");
+		provinceInput.setName("province");
+		provinceInput.setTitle("省份");
+		
+		Option o1=new Option();
+		o1.setTitle("北京");
+		o1.setValue("o1Value");
+		provinceOptions.add(o1);
+
+		Option o2=new Option();
+		o2.setTitle("上海");
+		o2.setValue("o2Value");
+		provinceOptions.add(o2);
+
+		Option o3=new Option();
+		o3.setTitle("浙江");
+		o3.setValue("o3Value");
+		provinceOptions.add(o3);
+		
+		//provinceInput.setValues(Arrays.asList("o1Value","o3Value"));
+		
+		fields.add(provinceInput);		
+		return pageObject;
 	}
 }
